@@ -1,0 +1,53 @@
+NOTE: The source of these instructions is the GCC Resource Center, IIT-Bombay 
+      http://www.cse.iitb.ac.in/grc/index.php?page=l-fcpa-4.7-multiple-install
+
+To build gcc-4.7.2 refer to the following instructions
+
+Step I : Downloading the gcc source code tarball
+
+    Make a new folder 'ifa', and cd to it
+         ~/$. mkdir ifa
+         ~/$. cd ifa
+    Download gcc-4.7.2 tarball in this folder.
+    Untar the gcc-4.7.2 tarball
+         ~/lfcpa$. tar -xvf gcc-4.7.2-tar.gz
+    After untarring, you will see a folder 'gcc-4.7.2'
+    Make the 'build' and 'install' directories.
+         ~/ifa$. mkdir build
+         ~/ifa$. mkdir install
+
+Step II : Building GCC 4.7.2
+
+    Let us assume that $INSTALL is the absolute path of install directory, and $SRC is the absolute path of gcc-4.7.2 directory.
+    cd to the build directory.
+         ~/ifa$. cd build
+    Configure gcc-4.7.2. For example, if we wish to build a C compiler, type the following to configure gcc.
+         ~/ifa/build$. $SRC/configure --enable-languages=c --prefix=$INSTALL
+    If you are on a 64 bit system, disable multilib during configure by the option --disable-multilib
+    After configuring successfully, build gcc-4.7.2.
+         ~/ifa/build$. make
+    If a successful make, install the gcc binaries in the install directory.
+         ~/ifa/build$. make install
+
+Now use the pristine gcc-4.7.2 build for the ifa plugin by following the steps below:
+
+Step I : Building the plugin
+
+    This folder currently contains the plugin files and a Makefile
+    Make changes in the Makefile
+         ~/ifa-plugin-v2$. vi Makefile
+    Modify the value of BASE_DIR with the path to the base directory of your pristine gcc-4.7.2 build
+    Hook the plugin dynamically in gcc
+         ~/ifa-plugin-v2$. make
+    You will see a file named plugin.so after the successful make.
+
+Step II : Testing L-FCPA
+
+    Create any sample program that you may want to test. Our test files are given in the folders /benchmark and /bench_pre.
+    Modify the Makefile to reflect the input file names by changing the target of the "test" as indicated in the Makefile
+    Run the command
+         ~/ifa-plugin-v2$. make test
+    Inspect the generated ifa dump *.233i.ifa where * is the name of the test file to analyze the information gathered by the pass.
+    Use the following to delete all dump files
+         ~/ifa-plugin-v2$. make clean
+
